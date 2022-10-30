@@ -1,2 +1,3 @@
-# dotnet-rabbitmq
-.NET RabbitMQ Examples
+# .NET RabbitMQ Examples
+
+https://burakneis.com/rabbitmq-nedir/
