@@ -2,6 +2,7 @@ using Api.Data;
 using Api.Services;
 using Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton(provider => new ConnectionFactory()
+{
+    Uri = new Uri(builder.Configuration.GetConnectionString("RabbitMQ"))
+});
+builder.Services.AddSingleton<RabbitMQClientManager>();
+builder.Services.AddSingleton<RabbitMQPublisher>();
 builder.Services.AddScoped<IProductService, ProductManager>();
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -26,6 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

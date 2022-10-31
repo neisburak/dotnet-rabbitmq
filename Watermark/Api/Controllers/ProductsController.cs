@@ -30,14 +30,14 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostAsync(ProductForUpsert model, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostAsync([FromForm] ProductForUpsert model, CancellationToken cancellationToken)
     {
         var result = await _productService.AddAsync(model, cancellationToken);
         return result ? Ok() : BadRequest();
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutAsync(int id, ProductForUpsert model, CancellationToken cancellationToken)
+    public async Task<IActionResult> PutAsync(int id, [FromForm] ProductForUpsert model, CancellationToken cancellationToken)
     {
         var result = await _productService.UpdateAsync(id, model, cancellationToken);
         return result ? Ok() : BadRequest();
