@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Mvc.Data;
+using Mvc.Services;
+using RabbitMQ.Client;
 
 namespace Mvc.Extensions;
 
@@ -8,6 +10,13 @@ public static class AppBuilderExtensions
 {
     public static void ConfigureApp(this WebApplicationBuilder builder)
     {
+        builder.Services.AddSingleton(provider => new ConnectionFactory()
+        {
+            Uri = new Uri(builder.Configuration.GetConnectionString("RabbitMQ")),
+            DispatchConsumersAsync = true
+        });
+        builder.Services.AddSingleton<RabbitMQClientManager>();
+        builder.Services.AddSingleton<RabbitMQPublisher>();
         builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
         {
             options.User.RequireUniqueEmail = true;
@@ -21,8 +30,10 @@ public static class AppBuilderExtensions
 
     public static void MigrateContext(this WebApplication application)
     {
-        var context = application.Services.GetRequiredService<DataContext>();
-        var userManager = application.Services.GetRequiredService<UserManager<IdentityUser>>();
+        var scope = application.Services.CreateScope();
+        
+        var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
         context.Database.Migrate();
 
