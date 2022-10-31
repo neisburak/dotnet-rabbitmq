@@ -1,3 +1,4 @@
+using Api.BackgroundServices;
 using Api.Data;
 using Api.Services;
 using Api.Services.Interfaces;
@@ -15,15 +16,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton(provider => new ConnectionFactory()
 {
-    Uri = new Uri(builder.Configuration.GetConnectionString("RabbitMQ"))
+    Uri = new Uri(builder.Configuration.GetConnectionString("RabbitMQ")),
+    DispatchConsumersAsync = true
 });
 builder.Services.AddSingleton<RabbitMQClientManager>();
 builder.Services.AddSingleton<RabbitMQPublisher>();
 builder.Services.AddScoped<IProductService, ProductManager>();
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseInMemoryDatabase("Products");
-});
+builder.Services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase("Products"));
+builder.Services.AddHostedService<ImageWatermarkProcessBackgroundService>();
 
 var app = builder.Build();
 

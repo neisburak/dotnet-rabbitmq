@@ -1,4 +1,5 @@
 using Api.Data;
+using Api.Extensions;
 using Api.Models;
 using Api.Models.RabbitMQ;
 using Api.Services.Interfaces;
@@ -18,35 +19,6 @@ public class ProductManager : IProductService
         _dataContext = dataContext;
     }
 
-    #region Helper Methods
-    private bool UploadFile(IFormFile file, out string imageName)
-    {
-        try
-        {
-            if (file is { Length: > 0 })
-            {
-                imageName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageName);
-
-                using var stream = new FileStream(path, FileMode.Create);
-                file.CopyTo(stream);
-
-                return true;
-            }
-            else
-            {
-                imageName = default!;
-                return false;
-            }
-        }
-        catch
-        {
-            imageName = default!;
-            return false;
-        }
-    }
-    #endregion
-
     public async Task<Product?> GetAsync(int id, CancellationToken cancellationToken) => await _dataContext.Products.FindAsync(new object[] { id }, cancellationToken);
 
     public async Task<IEnumerable<Product>> GetAsync(CancellationToken cancellationToken) => await _dataContext.Products.ToListAsync(cancellationToken);
@@ -54,11 +26,11 @@ public class ProductManager : IProductService
     public async Task<bool> AddAsync(ProductForUpsert productForUpsert, CancellationToken cancellationToken)
     {
         var product = productForUpsert.Adapt<Product>();
-        if (UploadFile(productForUpsert.Image, out string imageName))
+        var result = await productForUpsert.Image.UploadAsync(cancellationToken);
+        if (result.Status)
         {
-            product.Image = imageName;
-
-            _publisher.Publish(new ImageCreatedEvent { Name = imageName });
+            product.Image = result.Name!;
+            _publisher.Publish(new ImageCreatedEvent { Name = product.Image });
         }
         await _dataContext.AddAsync(product, cancellationToken);
         return await _dataContext.SaveChangesAsync(cancellationToken) > 0;
@@ -68,11 +40,11 @@ public class ProductManager : IProductService
     {
         var product = productForUpsert.Adapt<Product>();
         product.Id = id;
-        if (UploadFile(productForUpsert.Image, out string imageName))
+        var result = await productForUpsert.Image.UploadAsync(cancellationToken);
+        if (result.Status)
         {
-            product.Image = imageName;
-
-            _publisher.Publish(new ImageCreatedEvent { Name = imageName });
+            product.Image = result.Name!;
+            _publisher.Publish(new ImageCreatedEvent { Name = product.Image });
         }
         _dataContext.Entry<Product>(product).State = EntityState.Modified;
         return await _dataContext.SaveChangesAsync(cancellationToken) > 0;
