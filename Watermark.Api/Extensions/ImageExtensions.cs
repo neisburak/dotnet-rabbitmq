@@ -4,7 +4,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Api.Extensions;
+namespace Watermark.Api.Extensions;
 
 public static class ImageExtensions
 {

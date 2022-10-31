@@ -1,8 +1,8 @@
-using Api.Models;
-using Api.Services.Interfaces;
+using Watermark.Api.Models;
+using Watermark.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace Watermark.Api.Controllers;
 
 
 [ApiController]

@@ -1,6 +1,6 @@
 using RabbitMQ.Client;
 
-namespace Api.Services;
+namespace Watermark.Api.Services;
 
 public class RabbitMQClientManager : IDisposable
 {

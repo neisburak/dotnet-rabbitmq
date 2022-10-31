@@ -1,6 +1,6 @@
-using Api.Models;
+using Watermark.Api.Models;
 
-namespace Api.Extensions;
+namespace Watermark.Api.Extensions;
 
 public static class FormFileExtensions
 {

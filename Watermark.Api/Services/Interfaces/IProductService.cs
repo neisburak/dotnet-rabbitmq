@@ -1,6 +1,6 @@
-using Api.Models;
+using Watermark.Api.Models;
 
-namespace Api.Services.Interfaces;
+namespace Watermark.Api.Services.Interfaces;
 
 public interface IProductService
 {

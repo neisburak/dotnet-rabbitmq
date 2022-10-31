@@ -1,12 +1,12 @@
-using Api.Data;
-using Api.Extensions;
-using Api.Models;
-using Api.Models.RabbitMQ;
-using Api.Services.Interfaces;
+using Watermark.Api.Data;
+using Watermark.Api.Extensions;
+using Watermark.Api.Models;
+using Watermark.Api.Models.RabbitMQ;
+using Watermark.Api.Services.Interfaces;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Services;
+namespace Watermark.Api.Services;
 
 public class ProductManager : IProductService
 {

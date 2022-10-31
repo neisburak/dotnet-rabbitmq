@@ -1,12 +1,12 @@
 using System.Text;
 using System.Text.Json;
-using Api.Extensions;
-using Api.Models.RabbitMQ;
-using Api.Services;
+using Watermark.Api.Extensions;
+using Watermark.Api.Models.RabbitMQ;
+using Watermark.Api.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Api.BackgroundServices;
+namespace Watermark.Api.BackgroundServices;
 
 public class ImageWatermarkProcessBackgroundService : BackgroundService
 {

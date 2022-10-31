@@ -1,9 +1,4 @@
-using Api.BackgroundServices;
-using Api.Data;
-using Api.Services;
-using Api.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client;
+using Watermark.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,16 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton(provider => new ConnectionFactory()
-{
-    Uri = new Uri(builder.Configuration.GetConnectionString("RabbitMQ")),
-    DispatchConsumersAsync = true
-});
-builder.Services.AddSingleton<RabbitMQClientManager>();
-builder.Services.AddSingleton<RabbitMQPublisher>();
-builder.Services.AddScoped<IProductService, ProductManager>();
-builder.Services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase("Products"));
-builder.Services.AddHostedService<ImageWatermarkProcessBackgroundService>();
+builder.ConfigureApp();
 
 var app = builder.Build();
 

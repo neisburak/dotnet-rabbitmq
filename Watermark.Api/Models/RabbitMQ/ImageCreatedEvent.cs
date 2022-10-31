@@ -1,4 +1,4 @@
-namespace Api.Models.RabbitMQ;
+namespace Watermark.Api.Models.RabbitMQ;
 
 public class ImageCreatedEvent
 {

@@ -1,7 +1,7 @@
-using Api.Models;
+using Watermark.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Data;
+namespace Watermark.Api.Data;
 
 public class DataContext : DbContext
 {

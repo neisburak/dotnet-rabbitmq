@@ -1,8 +1,8 @@
 using System.Text;
 using System.Text.Json;
-using Api.Models.RabbitMQ;
+using Watermark.Api.Models.RabbitMQ;
 
-namespace Api.Services;
+namespace Watermark.Api.Services;
 
 public class RabbitMQPublisher
 {
