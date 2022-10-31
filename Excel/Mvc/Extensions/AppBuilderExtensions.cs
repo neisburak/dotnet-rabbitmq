@@ -26,6 +26,8 @@ public static class AppBuilderExtensions
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
         });
+
+        builder.Services.AddSignalR();
     }
 
     public static void MigrateContext(this WebApplication application)

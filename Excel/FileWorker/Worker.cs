@@ -46,7 +46,8 @@ public class Worker : BackgroundService
     private async Task Received(object sender, BasicDeliverEventArgs args)
     {
         var excel = JsonSerializer.Deserialize<CreateExcelMessage>(Encoding.UTF8.GetString(args.Body.ToArray()));
-
+        if(excel is null) return;
+        
         using var ms = new MemoryStream();
         var workbook = new XLWorkbook();
         var ds = new DataSet();
